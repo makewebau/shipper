@@ -16,7 +16,7 @@ class PluginFileParser
 
     public function getPluginAttribute($filename, $attribute)
     {
-        $versionLine = array_filter($this->getPluginData($filename), function($line) use ($attribute) {
+        $versionLine = array_filter($this->getPluginData($filename), function ($line) use ($attribute) {
             return $this->stringContains($line, $attribute.':');
         });
 
@@ -33,8 +33,9 @@ class PluginFileParser
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     public function stringContains($haystack, $needles)
@@ -44,6 +45,7 @@ class PluginFileParser
                 return true;
             }
         }
+
         return false;
     }
 }
