@@ -12,13 +12,13 @@ class Shipper
 
     public function __construct()
     {
-        $this->fileManager = new FileManager;
-        $this->zipper = new Zipper;
+        $this->fileManager = new FileManager();
+        $this->zipper = new Zipper();
     }
 
     /**
      * Prepare the Wordpress plugin contained in the given directory for deployment
-     * by producing a shippable .zip file
+     * by producing a shippable .zip file.
      **/
     public function ship($dir)
     {
@@ -47,8 +47,8 @@ class Shipper
         $this->fileManager->xcopy($dir, $finalDestination);
 
         // Remove studio.json file if it exists
-        if (file_exists($finalDestination . '/studio.json')) {
-            unlink($finalDestination . '/studio.json');
+        if (file_exists($finalDestination.'/studio.json')) {
+            unlink($finalDestination.'/studio.json');
         }
 
         // Run composer install
@@ -56,11 +56,11 @@ class Shipper
         echo shell_exec("composer install --prefer-dist --no-plugins --no-dev -d $finalDestination --ansi");
 
         // Delete skipped files
-        foreach($this->getSkippedFiles() as $filename) {
+        foreach ($this->getSkippedFiles() as $filename) {
             if (empty($filename)) {
                 continue;
             }
-            $path = $finalDestination . '/' . $filename;
+            $path = $finalDestination.'/'.$filename;
             echo shell_exec("rm -Rf $path");
         }
 
@@ -74,11 +74,11 @@ class Shipper
     {
         if (!file_exists($this->configFilePath)) {
             return [
-                'shippedPluginDirectory' => $this->fileManager->getHomeDirectory()
+                'shippedPluginDirectory' => $this->fileManager->getHomeDirectory(),
             ];
         }
 
-        return include(CONFIG_FILE_PATH);
+        return include CONFIG_FILE_PATH;
     }
 
     protected function getSkippedFiles()
@@ -95,12 +95,13 @@ class Shipper
             }
             fclose($file);
         }
+
         return $skippedFiles;
     }
 
     protected function getVersion()
     {
-        return "1.0.0";
+        return '1.0.0';
     }
 
     protected function baseDirectory()
