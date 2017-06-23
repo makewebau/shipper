@@ -10,4 +10,3 @@ function install()
         copy($assetsDirectory.'/'.$asset, $parentPackageDirectory.'/'.$asset);
     }
 }
-
