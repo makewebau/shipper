@@ -6,12 +6,8 @@
         }
     },
     "require": {
+        "files": ["src/functions.php"]
     },
     "require-dev": {
-    },
-    "scripts": {
-        "post-package-install": [
-            "MakeWeb\\Shipper\\FileManager::copyAssets"
-        ]
     }
 }
