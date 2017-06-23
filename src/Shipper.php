@@ -21,7 +21,7 @@ class Shipper
 
     /**
      * Prepare the Wordpress plugin contained in the given directory for deployment
-     * by producing a shippable .zip file
+     * by producing a shippable .zip file.
      **/
     public function ship($dir)
     {
@@ -68,9 +68,9 @@ class Shipper
         $this->fileManager->xcopy($dir, $finalDestination);
 
         // Remove studio.json file if it exists
-        if (file_exists($finalDestination . '/studio.json')) {
+        if (file_exists($finalDestination.'/studio.json')) {
             $this->output('Removing file: '. $finalDestination . '/studio.json');
-            unlink($finalDestination . '/studio.json');
+            unlink($finalDestination.'/studio.json');
         }
 
         // Run composer install
@@ -106,11 +106,11 @@ class Shipper
     {
         if (!file_exists($this->configFilePath)) {
             return [
-                'shippedPluginDirectory' => $this->fileManager->getHomeDirectory()
+                'shippedPluginDirectory' => $this->fileManager->getHomeDirectory(),
             ];
         }
 
-        return include(CONFIG_FILE_PATH);
+        return include CONFIG_FILE_PATH;
     }
 
     protected function getSkippedFiles()
@@ -127,6 +127,7 @@ class Shipper
             }
             fclose($file);
         }
+
         return $skippedFiles;
     }
 
