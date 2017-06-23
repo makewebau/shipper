@@ -3,9 +3,7 @@
     "autoload": {
         "psr-4": {
             "MakeWeb\\Shipper\\": "src/"
-        }
-    },
-    "require": {
+        },
         "files": ["src/functions.php"]
     },
     "require-dev": {
