@@ -1,0 +1,12 @@
+{
+    "name": "makeweb/shipper",
+    "autoload": {
+        "psr-4": {
+            "MakeWeb\\Shipper\\": "src/"
+        }
+    },
+    "require": {
+    },
+    "require-dev": {
+    }
+}
