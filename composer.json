@@ -8,5 +8,8 @@
     "require": {
     },
     "require-dev": {
-    }
+    },
+    "post-package-install": [
+        "MakeWeb\Shipper\FileManager::copyAssets"
+    ]
 }

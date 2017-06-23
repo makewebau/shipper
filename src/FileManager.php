@@ -85,4 +85,15 @@ class FileManager
     {
         return $shell_user = posix_getpwuid(posix_getuid())['dir'];
     }
+
+    public static function copyAssets()
+    {
+        $assetsDirectory = realpath(getcwd().'/../assets');
+
+        $parentPackageDirectory = realpath(getcwd().'/../../../');
+
+        foreach (['.shipignore', 'ship'] as $asset) {
+            copy($assetsDirectory.'/'.$asset, $parentPackageDirectory.'/'.$asset);
+        }
+    }
 }
