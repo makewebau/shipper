@@ -14,9 +14,9 @@ class Shipper
 
     public function __construct()
     {
-        $this->fileManager = new FileManager;
-        $this->pluginFileParser = new PluginFileParser;
-        $this->zipper = new Zipper;
+        $this->fileManager = new FileManager();
+        $this->pluginFileParser = new PluginFileParser();
+        $this->zipper = new Zipper();
     }
 
     /**
@@ -69,7 +69,7 @@ class Shipper
 
         // Remove studio.json file if it exists
         if (file_exists($finalDestination.'/studio.json')) {
-            $this->output('Removing file: '. $finalDestination . '/studio.json');
+            $this->output('Removing file: '.$finalDestination.'/studio.json');
             unlink($finalDestination.'/studio.json');
         }
 
@@ -80,11 +80,11 @@ class Shipper
 
         // Delete skipped files
         $this->output('Deleting files named in .shipignore file');
-        foreach($this->getSkippedFiles() as $filename) {
+        foreach ($this->getSkippedFiles() as $filename) {
             if (empty($filename)) {
                 continue;
             }
-            $path = $finalDestination . '/' . $filename;
+            $path = $finalDestination.'/'.$filename;
             $this->output('Deleting: '.$path);
             echo shell_exec("rm -Rf $path");
         }
@@ -153,10 +153,10 @@ class Shipper
 
     protected function output($string, $lineBreak = true, $colorCode = '37')
     {
-        echo("\033[{$colorCode}m$string\033[0m");
+        echo "\033[{$colorCode}m$string\033[0m";
 
         if ($lineBreak) {
-            echo("\n");
+            echo "\n";
         }
     }
 
