@@ -5,14 +5,19 @@ namespace MakeWeb\Shipper;
 class FileManager
 {
     /**
-     * Copy a file, or recursively copy a folder and its contents
+     * Copy a file, or recursively copy a folder and its contents.
+     *
      * @author      Aidan Lister <aidan@php.net>
+     *
      * @version     1.0.1
+     *
      * @link        http://aidanlister.com/2004/04/recursively-copying-directories-in-php/
-     * @param       string   $source    Source path
-     * @param       string   $dest      Destination path
-     * @param       int      $permissions New folder creation permissions
-     * @return      bool     Returns true on success, false on failure
+     *
+     * @param string $source      Source path
+     * @param string $dest        Destination path
+     * @param int    $permissions New folder creation permissions
+     *
+     * @return bool Returns true on success, false on failure
      */
     public function xcopy($source, $dest, $permissions = 0755)
     {
@@ -45,24 +50,24 @@ class FileManager
 
         // Clean up
         $dir->close();
+
         return true;
     }
 
     /**
-     * Recursively remove the given directory
+     * Recursively remove the given directory.
      *
      * @param string $path
      **/
     public function rrmdir($path)
     {
         $dir = opendir($path);
-        while(false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                $full = $path . '/' . $file;
-                if ( is_dir($full) ) {
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                $full = $path.'/'.$file;
+                if (is_dir($full)) {
                     rrmdir($full);
-                }
-                else {
+                } else {
                     unlink($full);
                 }
             }
@@ -72,7 +77,7 @@ class FileManager
     }
 
     /**
-     * Get the current shell user's home directory
+     * Get the current shell user's home directory.
      *
      * @return string
      **/
