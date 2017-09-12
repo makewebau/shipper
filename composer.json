@@ -1,5 +1,6 @@
 {
     "name": "makeweb/shipper",
+    "version": "1.0.5",
     "autoload": {
         "psr-4": {
             "MakeWeb\\Shipper\\": "src/"
