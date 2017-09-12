@@ -89,7 +89,7 @@ class FileManager
     }
 
     /**
-     * Copy the default shipignore file to the project directory
+     * Copy the default shipignore file to the project directory.
      *
      * @param string $directory Path to the project directory
      **/
