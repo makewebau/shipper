@@ -35,6 +35,7 @@ class Shipper
 
         if ($this->getArgument() == 'publish') {
             return $this->publish();
+
             return;
         }
 
@@ -196,14 +197,13 @@ class Shipper
     }
 
     /**
-     * Handle the publish argument
+     * Handle the publish argument.
      **/
     protected function publish()
     {
         try {
             $this->fileManager->publishShipIgnoreFile($this->dir);
-        }
-        catch (FileAlreadyExistsException $e) {
+        } catch (FileAlreadyExistsException $e) {
             return $this->red($e->getMessage());
         }
 
