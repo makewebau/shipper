@@ -2,7 +2,7 @@
 <?php
 
 // Require the package dependencies
-require __DIR__.'/../vendor/autoload.php';
+require getcwd().'/vendor/autoload.php';
 
 // Instantiate the shipper object
 $shipper = new \MakeWeb\Shipper\Shipper;
