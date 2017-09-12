@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+// Require the package dependencies
+require __DIR__.'/../vendor/autoload.php';
+
+// Instantiate the shipper object
+$shipper = new \MakeWeb\Shipper\Shipper;
+
+// Run the shipper
+$shipper->ship(getcwd(), $argv);
+

@@ -2,6 +2,8 @@
 
 namespace MakeWeb\Shipper;
 
+use MakeWeb\Shipper\Exceptions\FileAlreadyExistsException;
+
 class FileManager
 {
     /**
@@ -84,5 +86,24 @@ class FileManager
     public function getHomeDirectory()
     {
         return $shell_user = posix_getpwuid(posix_getuid())['dir'];
+    }
+
+    /**
+     * Copy the default shipignore file to the project directory
+     *
+     * @param string $directory Path to the project directory
+     **/
+    public function publishShipIgnoreFile($directory)
+    {
+        if (file_exists($directory.'/.shipignore')) {
+            throw new FileAlreadyExistsException($directory.'/.shipignore');
+        }
+
+        copy($this->getShipIgnoreFileTemplatePath(), $directory.'/.shipignore');
+    }
+
+    protected function getShipIgnoreFileTemplatePath()
+    {
+        return realpath(__DIR__.'/../assets/shipignore.template');
     }
 }

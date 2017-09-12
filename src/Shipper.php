@@ -2,8 +2,12 @@
 
 namespace MakeWeb\Shipper;
 
+use MakeWeb\Shipper\Exceptions\FileAlreadyExistsException;
+
 class Shipper
 {
+    protected $arguments;
+
     protected $dir;
 
     protected $fileManager;
@@ -23,9 +27,16 @@ class Shipper
      * Prepare the Wordpress plugin contained in the given directory for deployment
      * by producing a shippable .zip file.
      **/
-    public function ship($dir)
+    public function ship($dir, $arguments)
     {
         $this->dir = $dir;
+
+        $this->arguments = $arguments;
+
+        if ($this->getArgument() == 'publish') {
+            return $this->publish();
+            return;
+        }
 
         $this->version = $this->getVersion();
 
@@ -168,5 +179,34 @@ class Shipper
     protected function cyan($message, $lineBreak = true)
     {
         $this->output($message, $lineBreak, '36');
+    }
+
+    protected function red($message, $lineBreak = true)
+    {
+        $this->output($message, $lineBreak, '31');
+    }
+
+    protected function getArgument()
+    {
+        if (!isset($this->arguments[0])) {
+            return;
+        }
+
+        return $this->arguments[1];
+    }
+
+    /**
+     * Handle the publish argument
+     **/
+    protected function publish()
+    {
+        try {
+            $this->fileManager->publishShipIgnoreFile($this->dir);
+        }
+        catch (FileAlreadyExistsException $e) {
+            return $this->red($e->getMessage());
+        }
+
+        $this->green('.shipignore file published');
     }
 }
