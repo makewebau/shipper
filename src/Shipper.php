@@ -122,7 +122,7 @@ class Shipper
             ];
         }
 
-        return include CONFIG_FILE_PATH;
+        return include $this->configFilePath;
     }
 
     protected function getSkippedFiles()
