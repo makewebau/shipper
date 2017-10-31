@@ -33,8 +33,8 @@ class Shipper
 
         $this->arguments = $arguments;
 
-        if ($this->getArgument() == 'publish') {
-            return $this->publish();
+        if ($this->getArgument() === 'publish') {
+            $this->publish();
 
             return;
         }
@@ -122,7 +122,7 @@ class Shipper
             ];
         }
 
-        return include CONFIG_FILE_PATH;
+        return include $this->configFilePath;
     }
 
     protected function getSkippedFiles()
@@ -195,11 +195,15 @@ class Shipper
 
     protected function getArgument()
     {
+<<<<<<< HEAD
         if (!isset($this->arguments[1])) {
             return;
         }
 
         return $this->arguments[1];
+=======
+        return isset($this->arguments[1]) ? $this->arguments[1] : null;
+>>>>>>> b1c58dafcc9cf4ac5eab5ea6e077528420ea5066
     }
 
     /**
@@ -210,7 +214,7 @@ class Shipper
         try {
             $this->fileManager->publishShipIgnoreFile($this->dir);
         } catch (FileAlreadyExistsException $e) {
-            return $this->red($e->getMessage());
+            $this->red($e->getMessage());
         }
 
         $this->green('.shipignore file published');
