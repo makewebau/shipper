@@ -160,7 +160,13 @@ class Shipper
 
     protected function pluginFilePath()
     {
-        return $this->dir.'/'.$this->baseDirectory().'.php';
+        if (file_exists($pluginFilePath = $this->dir.'/'.$this->baseDirectory().'.php')) {
+            return $pluginFilePath;
+        }
+
+        if (file_exists($themeFilePath = $this->dir.'/style.css')) {
+            return $themeFilePath;
+        }
     }
 
     protected function output($string, $lineBreak = true, $colorCode = '37')
