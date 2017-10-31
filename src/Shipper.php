@@ -195,7 +195,7 @@ class Shipper
 
     protected function getArgument()
     {
-        if (!isset($this->arguments[0])) {
+        if (!isset($this->arguments[1])) {
             return;
         }
 
