@@ -112,6 +112,10 @@ class Shipper
         $this->green('Success!');
         $this->output('');
         $this->green($finalZipPath.' ready to ship!');
+
+        if (file_exists($deployScript = $this->dir.'/deploy.php')) {
+            require $deployScript;
+        }
     }
 
     protected function getConfig()
@@ -210,5 +214,10 @@ class Shipper
         }
 
         $this->green('.shipignore file published');
+    }
+
+    protected function zipFileName()
+    {
+        return $this->baseDirectory().'-'.$this->version.'.zip';
     }
 }
