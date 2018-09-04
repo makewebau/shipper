@@ -18,6 +18,15 @@ Once installed, you will have access to a new terminal command `vendor/bin/ship`
 
     vendor/bin/ship
     
+
+### Deployment
+
+To add a deployment script to your project create a file called 'deploy.php' in the root of your project and add whatever code there you would like to add. This will be called by the Shipper.php class and from the scope of that class which means you can use any methods on that class with the $this variable.
+
+To deploy after shipping use the flag --deploy (or -d for brevity).
+
+    vendor/bin/ship --deploy
+
 ### Terminal Alias
 
 You might want to create an alias so you can use something like `ship` to save remembering and typing all those additional characters. To do this on a Mac, add the following to your `~/.bash_profile` file (or create the file and add it, if it does not already exist):
