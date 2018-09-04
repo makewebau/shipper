@@ -65,33 +65,34 @@ class Shipper
 
         // Create the shipped plugin directory if it does not yet exist
         if (!file_exists($shippedPluginDirectory)) {
-            $this->output('Creating directory: '.$shippedPluginDirectory);
+            $this->line('Creating directory: '.$shippedPluginDirectory);
             mkdir($shippedPluginDirectory);
         }
 
         // Create the plugin release directory if it does not yet exist
         if (!file_exists($releaseDirectory)) {
-            $this->output('Creating directory: '.$releaseDirectory);
+            $this->line('Creating directory: '.$releaseDirectory);
             mkdir($releaseDirectory);
         }
 
         // Copy the files to their shipped location
-        $this->output('Copying plugin files to: '.$finalDestination);
+        $this->line('Copying plugin files to: '.$finalDestination);
         $this->fileManager->xcopy($dir, $finalDestination);
 
         // Remove studio.json file if it exists
         if (file_exists($finalDestination.'/studio.json')) {
-            $this->output('Removing file: '.$finalDestination.'/studio.json');
+            $this->line('Removing file: '.$finalDestination.'/studio.json');
             unlink($finalDestination.'/studio.json');
         }
 
         // Run composer install
-        $this->output('Running composer install');
+        $this->line('Running composer install');
         echo shell_exec("rm -R $finalDestination/vendor");
         echo shell_exec("composer install --prefer-dist --no-plugins --no-dev -d $finalDestination --ansi");
+        $this->output('');
 
         // Delete skipped files
-        $this->output('Deleting files named in .shipignore file');
+        $this->line('Deleting files named in .shipignore file');
         foreach ($this->getSkippedFiles() as $filename) {
             if (empty($filename)) {
                 continue;
@@ -101,19 +102,18 @@ class Shipper
             echo shell_exec("rm -Rf $path");
         }
 
-        $this->output('Zipping up remaining files');
+        $this->line('Zipping up remaining files');
         $this->zipper->zipDirectory($finalDestination, $finalZipPath);
 
         // Delete the unzipped directory
-        $this->output('Deleting the build directory');
+        $this->line('Deleting the build directory');
         shell_exec("rm -Rf $finalDestination");
 
-        $this->output('');
-        $this->green('Success!');
-        $this->output('');
-        $this->green($finalZipPath.' ready to ship!');
+        $this->output('Success! ', false);
+        $this->green($finalZipPath, false);
+        $this->output(' ready to ship!');
 
-        if (file_exists($deployScript = $this->dir.'/deploy.php')) {
+        if (file_exists($deployScript = $this->dir.'/deploy.php') && $this->shouldDeploy()) {
             require $deployScript;
         }
     }
@@ -182,6 +182,12 @@ class Shipper
         }
     }
 
+    protected function line($string)
+    {
+        $this->output($string);
+        $this->output('');
+    }
+
     protected function green($message, $lineBreak = true)
     {
         $this->output($message, $lineBreak, '32');
@@ -219,5 +225,31 @@ class Shipper
     protected function zipFileName()
     {
         return $this->baseDirectory().'-'.$this->version.'.zip';
+    }
+
+    protected function shouldDeploy()
+    {
+        return $this->flagExists('d', 'deploy');
+    }
+
+    protected function flagExists($shortFlag, $longFlag = null)
+    {
+        return count(array_filter($this->getAllFlags(), function ($flag) use ($shortFlag, $longFlag) {
+            return $flag === $shortFlag || $flag === $longFlag;
+        })) > 0;
+    }
+
+    protected function getAllFlags()
+    {
+        return array_map(function ($flag) {
+            return str_replace('-', '', $flag);
+        }, array_filter($this->arguments, function ($argument) {
+            return $this->argumentIsFlag($argument);
+        }));
+    }
+
+    protected function argumentIsFlag($argument)
+    {
+        return $argument[0] == '-';
     }
 }
