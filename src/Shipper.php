@@ -6,15 +6,15 @@ use MakeWeb\Shipper\Exceptions\FileAlreadyExistsException;
 
 class Shipper
 {
-    protected $arguments;
+    public $arguments;
 
-    protected $dir;
+    public $dir;
 
-    protected $fileManager;
+    public $fileManager;
 
-    protected $zipper;
+    public $zipper;
 
-    protected $pluginFileParser;
+    public $pluginFileParser;
 
     public function __construct()
     {
@@ -56,11 +56,11 @@ class Shipper
 
         $releaseDirectory = $shippedPluginDirectory.'/'.$this->baseDirectory();
         $finalDestination = $releaseDirectory.'/'.$this->baseDirectory();
-        $finalZipPath = $finalDestination.'-'.$this->version.'.zip';
+        $this->finalZipPath = $finalDestination.'-'.$this->version.'.zip';
 
         $this->output('');
         $this->output('Zip file will be saved to ', false);
-        $this->green($finalZipPath);
+        $this->green($this->finalZipPath);
         $this->output('');
 
         // Create the shipped plugin directory if it does not yet exist
@@ -103,14 +103,14 @@ class Shipper
         }
 
         $this->line('Zipping up remaining files');
-        $this->zipper->zipDirectory($finalDestination, $finalZipPath);
+        $this->zipper->zipDirectory($finalDestination, $this->finalZipPath);
 
         // Delete the unzipped directory
         $this->line('Deleting the build directory');
         shell_exec("rm -Rf $finalDestination");
 
         $this->output('Success! ', false);
-        $this->green($finalZipPath, false);
+        $this->green($this->finalZipPath, false);
         $this->output(' ready to ship!');
 
         if (file_exists($deployScript = $this->dir.'/deploy.php') && $this->shouldDeploy()) {
@@ -118,7 +118,7 @@ class Shipper
         }
     }
 
-    protected function getConfig()
+    public function getConfig()
     {
         if (!file_exists($this->configFilePath)) {
             return [
@@ -129,7 +129,7 @@ class Shipper
         return include $this->configFilePath;
     }
 
-    protected function getSkippedFiles()
+    public function getSkippedFiles()
     {
         if (!file_exists($this->dir.'/.shipignore')) {
             return [];
@@ -147,22 +147,22 @@ class Shipper
         return $skippedFiles;
     }
 
-    protected function getVersion()
+    public function getVersion()
     {
         return $this->pluginFileParser->getPluginVersion($this->pluginFilePath());
     }
 
-    protected function getPluginName()
+    public function getPluginName()
     {
         return $this->pluginFileParser->getPluginName($this->pluginFilePath());
     }
 
-    protected function baseDirectory()
+    public function baseDirectory()
     {
         return basename($this->dir);
     }
 
-    protected function pluginFilePath()
+    public function pluginFilePath()
     {
         if (file_exists($pluginFilePath = $this->dir.'/'.$this->baseDirectory().'.php')) {
             return $pluginFilePath;
@@ -173,7 +173,7 @@ class Shipper
         }
     }
 
-    protected function output($string, $lineBreak = true, $colorCode = '37')
+    public function output($string, $lineBreak = true, $colorCode = '37')
     {
         echo "\033[{$colorCode}m$string\033[0m";
 
@@ -182,28 +182,28 @@ class Shipper
         }
     }
 
-    protected function line($string)
+    public function line($string)
     {
         $this->output($string);
         $this->output('');
     }
 
-    protected function green($message, $lineBreak = true)
+    public function green($message, $lineBreak = true)
     {
         $this->output($message, $lineBreak, '32');
     }
 
-    protected function cyan($message, $lineBreak = true)
+    public function cyan($message, $lineBreak = true)
     {
         $this->output($message, $lineBreak, '36');
     }
 
-    protected function red($message, $lineBreak = true)
+    public function red($message, $lineBreak = true)
     {
         $this->output($message, $lineBreak, '31');
     }
 
-    protected function getArgument()
+    public function getArgument()
     {
         return isset($this->arguments[1]) ? $this->arguments[1] : null;
     }
@@ -211,7 +211,7 @@ class Shipper
     /**
      * Handle the publish argument.
      **/
-    protected function publish()
+    public function publish()
     {
         try {
             $this->fileManager->publishShipIgnoreFile($this->dir);
@@ -222,24 +222,24 @@ class Shipper
         $this->green('.shipignore file published');
     }
 
-    protected function zipFileName()
+    public function zipFileName()
     {
         return $this->baseDirectory().'-'.$this->version.'.zip';
     }
 
-    protected function shouldDeploy()
+    public function shouldDeploy()
     {
         return $this->flagExists('d', 'deploy');
     }
 
-    protected function flagExists($shortFlag, $longFlag = null)
+    public function flagExists($shortFlag, $longFlag = null)
     {
         return count(array_filter($this->getAllFlags(), function ($flag) use ($shortFlag, $longFlag) {
             return $flag === $shortFlag || $flag === $longFlag;
         })) > 0;
     }
 
-    protected function getAllFlags()
+    public function getAllFlags()
     {
         return array_map(function ($flag) {
             return str_replace('-', '', $flag);
@@ -248,7 +248,7 @@ class Shipper
         }));
     }
 
-    protected function argumentIsFlag($argument)
+    public function argumentIsFlag($argument)
     {
         return $argument[0] == '-';
     }
